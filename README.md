@@ -37,10 +37,10 @@ Options:
 Examples:
 ```sh
 slc-model-discover --help
-slc-model-discover petsapp cat
-slc-model-discover -h 79.22.156.34 -p 8888 --c postgresql petsapp cat
-slc-model-discover --host 79.22.156.34 --port 8888 --connector postgresql petsapp cat
-slc-model-discover --outpath ./common/models --port 8888 --connector postgresql petsapp cat
+slc-model-discover petsapp cloudant_db
+slc-model-discover -h 79.22.156.34 -p 8888 --c postgresql petsapp cloudant_db
+slc-model-discover --host 79.22.156.34 --port 8888 --connector postgresql petsapp cloudant_db
+slc-model-discover --outpath ./common/models --port 8888 --connector postgresql petsapp cloudant_db
 ```
 
 
