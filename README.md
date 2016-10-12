@@ -23,7 +23,7 @@ npm i -g slc-model-discover
 Usage: index [options] <dbName> <datasName>.
 
 - dbName: The name of the database to inspect.
-- datasName: The name of the datasource to use (the key used in "datasources.json" and equivalent files).
+- datasName: The name of the datasource to use (the key used in "datasources.json" or equivalent files).
 
 Options:
 
