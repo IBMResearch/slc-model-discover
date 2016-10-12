@@ -23,9 +23,9 @@ program
          '\t- dbName: The name of the database to inspect.\n' +
          '\t- datasName: The name of the datasource to use (the key used in ' +
          '"datasources.json" and equivalent files).')
-  .option('-op, --outpath <s>', 'Path to drop the discovered models setup' +
+  .option('-o, --outpath <s>', 'Path to drop the discovered models setup' +
           ' into. (default: ./server/models)')
-  .option('-sp, --serverpath <s>', 'Path to the LoopBack app "server.js" ' +
+  .option('-s, --serverpath <s>', 'Path to the LoopBack app "server.js" ' +
           'file. (default: ./server/server.js)')
   .option('-v, --verbose', 'Print the debug lines. (default: false)')
   .parse(process.argv);

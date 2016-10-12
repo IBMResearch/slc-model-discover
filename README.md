@@ -29,8 +29,8 @@ Options:
 
   -h, --help             output usage information
   -V, --version          output the version number
-  -op, --outpath <s>     Path to drop the discovered models setup into. (default: ./server/models)
-  -sp, --serverpath <s>  Path to the LoopBack app "server.js" file. (default: ./server/server.js)
+  -o, --outpath <s>     Path to drop the discovered models setup into. (default: ./server/models)
+  -s, --serverpath <s>  Path to the LoopBack app "server.js" file. (default: ./server/server.js)
   -v, --verbose          Print the debug lines. (default: false)
 ```
 
@@ -38,9 +38,7 @@ Examples:
 ```sh
 slc-model-discover --help
 slc-model-discover petsapp cloudant_db
-slc-model-discover -h 79.22.156.34 -p 8888 --c postgresql petsapp cloudant_db
-slc-model-discover --host 79.22.156.34 --port 8888 --connector postgresql petsapp cloudant_db
-slc-model-discover --outpath ./common/models --port 8888 --connector postgresql petsapp cloudant_db
+slc-model-discover -o ./common/models petsapp cloudant_db
 ```
 
 
