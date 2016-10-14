@@ -37,8 +37,8 @@ Options:
 Examples:
 ```sh
 slc-model-discover --help
-slc-model-discover petsapp cloudant_db
-slc-model-discover -o ./common/models petsapp cloudant_db
+slc-model-discover petsapp external_db
+slc-model-discover -o ./common/models petsapp external_db
 ```
 
 
