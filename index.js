@@ -9,13 +9,55 @@
 
 'use strict';
 
+/* eslint-disable no-console */
 
-const fs = require('fs');
-
-const lodash = require('lodash');
+const Promise = require('bluebird');
 const dbg = require('debug')('slc-model-discover:index');
+const writeFile = Promise.promisify(require('fs').writeFile);
 
 const errMandatory = 'Mandatory option not found: ';
+
+
+function getWriteSchema(model, datasource, dbName, outPath) {
+  return new Promise((resolve, reject) => {
+    if (!model.name || (model.type !== 'table')) {
+      dbg('Doing nothing for model', model);
+
+      resolve();
+      return;
+    }
+    dbg(`Discover: ${model.name}`);
+
+    // Not working, using the callback.
+    // const discoverSch = Promise.promisify(datasource.discoverSchema);
+    datasource.discoverSchema(model.name, { schema: dbName }, (error, schema) => {
+      if (error) {
+        console.log('Warning: Generating the table for this model:' +
+                    ` ${model.name}, message: ${error.message}`);
+
+        // We dont' want to break the full thing. The view also have type "table",
+        // so it sometimes happens.
+        resolve();
+        return;
+      }
+
+      if (!schema) {
+        reject(new Error('Schema not found'));
+        return;
+      }
+
+      const outputName = `${outPath}/${schema.name}.json`;
+      dbg(`Auto discovery success: ${schema.name}`);
+
+      writeFile(outputName, JSON.stringify(schema, null, 2))
+      .then(() => {
+        resolve();
+        dbg(`JSON saved to "${outputName}"`);
+      })
+      .catch(err => reject(new Error(`Wrinting to the file: ${err.message}`)));
+    });
+  });
+}
 
 
 // "outPath" should be absolute here.
@@ -40,47 +82,31 @@ module.exports = (dbName, datasource, outPath) =>
       return;
     }
 
-    // TODO use a promise here.
+
+    // Not working, so using the callback.
+    // const discoverDefs = Promise.promisify(datasource.discoverModelDefinitions);
     datasource.discoverModelDefinitions({ schema: dbName }, (err, models) => {
-      if (err || !models) {
+      if (err) {
         reject(new Error(`Discovering definitions: ${err.message}`));
 
         return;
       }
 
-      dbg('Models discovered', models);
+      if (!models) {
+        reject(new Error('Empty models'));
 
-      lodash.each(models, (model) => {
-        if (model.name && (model.type === 'table')) {
-          dbg(`Discover: ${model.name}`);
+        return;
+      }
+      console.log('Models correctly discovered'); // eslint-disable-line no-console
+      dbg('Discovered models', models);
 
-          datasource.discoverSchema(model.name, { schema: dbName }, (err2, schema) => {
-            if (err2) {
-              reject(new Error(`Discovering the schema: ${err2.message}`));
-
-              return;
-            }
-
-            if (!schema) {
-              reject(new Error('Schema not found'));
-
-              return;
-            }
-
-            const outputName = `${outPath}/${schema.name}.json`;
-            dbg(`Auto discovery success: ${schema.name}`);
-
-            // TODO: Use a promise here.
-            fs.writeFile(outputName, JSON.stringify(schema, null, 2), (err3) => {
-              if (err3) {
-                reject(new Error(`Wrinting to the file: ${err3.message}`));
-
-                return;
-              }
-              dbg(`JSON saved to "${outputName}"`);
-            });
-          });
-        }
-      });
+      Promise.map(models, model => getWriteSchema(model, datasource, dbName, outPath))
+      .then(() => {
+        console.log('All task correctly finished');
+        resolve();
+      })
+      .catch(err2 => reject(new Error(`Getting/writing the Schema: ${err2.message}`)));
     });
   });
+
+/* eslint-enable no-console */

@@ -26,6 +26,9 @@
   "bugs": {
     "url": "https://github.com/IBMResearch/slc-model-discover/issues"
   },
+  "bin": {
+    "slc-model-discover": "bin/index.js"
+  },
   "scripts": {
     "test": "tap test",
     "lint": "eslint .",
@@ -35,9 +38,9 @@
     "posttest": "npm run lint && npm run dep-ok && npm run dep-sec"
   },
   "dependencies": {
+    "bluebird": "^3.4.6",
     "commander": "^2.9.0",
-    "debug": "^2.2.0",
-    "lodash": "^4.15.0"
+    "debug": "^2.2.0"
   },
   "devDependencies": {
     "depcheck": "^0.6.4",

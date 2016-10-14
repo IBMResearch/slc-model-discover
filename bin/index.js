@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
   Copyright (c) 2016 IBM Research Emergent Solutions
                      Jesús Pérez <jesusprubio@gmail.com>
@@ -55,7 +57,12 @@ const dataSource = app.dataSources[program.args[1]];
 dbg('Running, opts:', dbName, outPath, datasName);
 
 run(program.args[0], dataSource, outPath)
-.then(() => { console.log('Models correctly discovered.'); }) // eslint-disable-line no-console
+.then(() => {
+  console.log('All done'); // eslint-disable-line no-console
+  // LoopBack doesn't have a "stop" method in the "app" object, so we need to use this,
+  // ref: https://github.com/strongloop/loopback/issues/1729
+  process.exit(0);
+})
 .catch((err) => {
   console.error(`Error: ${err.message}`); // eslint-disable-line no-console
   process.exit(1);

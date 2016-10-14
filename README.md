@@ -14,7 +14,7 @@ Client to discover LoopBack models from any database using the proper connector.
 
 - Get a copy of the code and install Node dependencies.
 ```sh
-npm i -g slc-model-discover
+npm i -g IBMResearch/slc-model-discover
 ```
 
 
@@ -22,7 +22,7 @@ npm i -g slc-model-discover
 ```
 Usage: index [options] <dbName> <datasName>.
 
-- dbName: The name of the database to inspect.
+- dbName: The name of the original database to inspect.
 - datasName: The name of the datasource to use (the key used in "datasources.json" or equivalent files).
 
 Options:
