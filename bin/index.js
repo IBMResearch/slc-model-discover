@@ -21,8 +21,7 @@ const run = require('../');
 
 program
   .version(version)
-  .usage('[options] <dbName> <datasName>.\n\n' +
-         '\t- dbName: The name of the database to inspect.\n' +
+  .usage('[options] <datasName>.\n\n' +
          '\t- datasName: The name of the datasource to use (the key used in ' +
          '"datasources.json" and equivalent files).')
   .option('-o, --outpath <s>', 'Path to drop the discovered models setup' +
@@ -34,12 +33,11 @@ program
 
 
 // Mandatory parameters.
-if (program.args.length !== 2) {
+if (program.args.length !== 1) {
   program.help();
   process.exit();
 }
-const dbName = program.args[0];
-const datasName = program.args[1];
+const datasName = program.args[0];
 
 // Optional ones.
 if (program.verbose) { dbg = console.log; } // eslint-disable-line no-console
@@ -52,11 +50,11 @@ const app = require(path.resolve(serverPath));
 let outPath = program.outpath || './server/models';
 outPath = path.resolve(outPath);
 
-const dataSource = app.dataSources[program.args[1]];
+const dataSource = app.dataSources[datasName];
 
-dbg('Running, opts:', dbName, outPath, datasName);
+dbg('Running, opts:', { datasName, outPath });
 
-run(program.args[0], dataSource, outPath)
+run(dataSource, outPath)
 .then(() => {
   console.log('All done'); // eslint-disable-line no-console
   // LoopBack doesn't have a "stop" method in the "app" object, so we need to use this,

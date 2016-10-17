@@ -28,9 +28,12 @@ function getWriteSchema(model, datasource, dbName, outPath) {
     }
     dbg(`Discover: ${model.name}`);
 
+    const opts = {};
+    if (dbName) { opts.schema = dbName; }
+
     // Not working, using the callback.
     // const discoverSch = Promise.promisify(datasource.discoverSchema);
-    datasource.discoverSchema(model.name, { schema: dbName }, (error, schema) => {
+    datasource.discoverSchema(model.name, opts, (error, schema) => {
       if (error) {
         console.log('Warning: Generating the table for this model:' +
                     ` ${model.name}, message: ${error.message}`);
@@ -61,16 +64,9 @@ function getWriteSchema(model, datasource, dbName, outPath) {
 
 
 // "outPath" should be absolute here.
-module.exports = (dbName, datasource, outPath) =>
+module.exports = (datasource, outPath) =>
   new Promise((resolve, reject) => {
-    // Getting the options and setting the defaults it not present.
-
-    // Rejecting in case of the mandatory ones.
-    if (!dbName) {
-      reject(new Error(`${errMandatory}"db"`));
-
-      return;
-    }
+    // Getting the proper options in each case.
     if (!datasource) {
       reject(new Error(`${errMandatory}"dataSource"`));
 
@@ -82,18 +78,30 @@ module.exports = (dbName, datasource, outPath) =>
       return;
     }
 
+    let dbName = null;
+    const opts = {};
+
+    if (Object.keys(datasource.adapter.settings.connector).indexOf('MySQL') !== -1) {
+      // TODO: Add this to the MySQL connector!
+      dbg('MySQL connector detected, trimming the options');
+
+      dbName = datasource.adapter.settings.database;
+      opts.schema = dbName;
+    }
+
+    dbg('Discovering model definitions, opts', opts);
 
     // Not working, so using the callback.
     // const discoverDefs = Promise.promisify(datasource.discoverModelDefinitions);
-    datasource.discoverModelDefinitions({ schema: dbName }, (err, models) => {
+    datasource.discoverModelDefinitions(opts, (err, models) => {
       if (err) {
         reject(new Error(`Discovering definitions: ${err.message}`));
 
         return;
       }
 
-      if (!models) {
-        reject(new Error('Empty models'));
+      if (!models || !models.length) {
+        reject(new Error('No model found.'));
 
         return;
       }
