@@ -8,10 +8,6 @@ Client to discover LoopBack models from any database using the proper connector.
 
 ## Install
 
-- Install the last Node.js stable version.
- - https://nodejs.org/download
- - A better alternative for developers is to use [nvm](https://github.com/creationix/nvm), to test different versions.
-
 - Get a copy of the code and install Node dependencies.
 ```sh
 npm i -g IBMResearch/slc-model-discover
