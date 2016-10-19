@@ -1,6 +1,6 @@
 # Loopback model discover
 
-[![Continuos integration status](https://travis-ci.org/IBMResearch/slc-model-discover.svg)](https://travis-ci.org/IBMResearch/slc-model-discover)
+[![Continuos integration status](https://travis-ci.org/IBMResearch/slc-model-discover.svg?branch=master)](https://travis-ci.org/IBMResearch/slc-model-discover)
 [![NSP Status](https://nodesecurity.io/orgs/ibmresearch/projects/e12d6c60-9c19-42e2-913b-0f670cf692bb/badge)](https://nodesecurity.io/orgs/ibmresearch/projects/e12d6c60-9c19-42e2-913b-0f670cf692bb)
 
 Client to discover LoopBack models from any database using the proper connector.
